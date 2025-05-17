@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎧 Vice Downloader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(180deg, #0f0c29, #302b63, #24243e);
+      font-family: 'Orbitron', sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1.8rem;
+      text-align: center;
+      color: #ff69b4;
+      text-shadow: 2px 2px 8px #00f0ff;
+      margin-bottom: 20px;
+    }
+
+    .box {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(6px);
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #fff;
+      color: #111;
+    }
+
+    button {
+        margin-top: 10px;
+        padding: 12px;
+        background: linear-gradient(45deg, #00f0ff, #ff69b4);
+        color: white;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        text-transform: uppercase;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px #ff69b4;
+    }
+
+    .preview {
+      text-align: center;
+    }
+
+    .preview img {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+
+    .footer {
+      margin-top: 10rem;
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎶 Vice City MP3 Downloader</h1>
+
+  <div class="box">
+    <input id="url" type="text" placeholder="Pega el link de YouTube 🎥">
+    <button onclick="obtenerInfo()">Obtener info</button>
+
+    <div id="preview" class="preview" style="display:none;">
+      <h3 id="titulo"></h3>
+      <p id="duracion"></p>
+      <img id="thumbnail" src="" alt="Thumbnail"/>
+      <form id="formDescarga" method="POST" action="/download">
+        <input type="hidden" name="url" id="urlFinal">
+        <button type="submit">Descargar MP3 🎧</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>Hecho con 💾 por Benja - Proyecto Retro 💜</p>
+  </div>
+
+  <script>
+    async function obtenerInfo() {
+      const url = document.getElementById("url").value;
+      if (!url) return alert("Pega un link primero");
+
+      const res = await fetch(`/info?url=${encodeURIComponent(url)}`);
+      const data = await res.json();
+
+      if (data.error) {
+        alert("Error al obtener info del video.");
+        return;
+      }
+
+      document.getElementById("titulo").innerText = data.title;
+      document.getElementById("duracion").innerText = "Duración: " + data.duration;
+      document.getElementById("thumbnail").src = data.thumbnail;
+      document.getElementById("urlFinal").value = url;
+      document.getElementById("preview").style.display = "block";
+    }
+  </script>
+</body>
+</html>
