@@ -18,7 +18,7 @@
 
 ## 📸 Vista previa
 
-> *(puedes subir un screenshot y poner el link real aquí)*
+
 
 ![Preview](https://i.imgur.com/r2l0nGp.png)
 
